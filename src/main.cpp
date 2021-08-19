@@ -13,7 +13,7 @@ int main(void)
     }
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Aspire", NULL, NULL);
+    window = glfwCreateWindow(800, 800, "Aspire", NULL, NULL);
     if (!window){
         glfwTerminate();
         return -1;
@@ -28,16 +28,27 @@ int main(void)
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;//print opengl version
 
+    float vertices[6] = {//each line is a vertex
+        -0.5f, -0.5f,
+         0.0f,  0.5f,
+         0.5f, -0.5f
+    };
+
+    //Create and bind buffer, then feed it data
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (const void*)0);//define the buffer
+    glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), vertices, GL_STATIC_DRAW);//add vertex data
+    glEnableVertexAttribArray(0);//enable buffer so it can be used for rendering
+    glBindBuffer(GL_ARRAY_BUFFER, 0);//clear buffer binding
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBegin(GL_TRIANGLES);
-        glVertex2f(-0.5f, -0.5f);
-        glVertex2f(0.0f, 0.5f);
-        glVertex2f(0.5f, -0.5f);
-        glEnd();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
