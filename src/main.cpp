@@ -127,7 +127,7 @@ int main(void)
 
     //Buffers and binding vb to vao
     VertexBuffer vb(vertices, 4*2*sizeof(float));
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);//define the buffer
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);//define the vertex buffer for the vao
     glEnableVertexAttribArray(0);//enable buffer (at index 0) so it can be used for rendering
     IndexBuffer ib(indices, 6);
 
@@ -184,8 +184,8 @@ int main(void)
     }
 
     glDeleteProgram(shader);
-    }
-    //delete vbo and ibo
+    //delete vbo and ibo?
+    }//end application scope before killing glfw
     glfwTerminate();
     return 0;
 }
