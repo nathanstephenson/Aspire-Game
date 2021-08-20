@@ -9,7 +9,11 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 //using default types so that it is nicer to deal with non-opengl apis
+
+//Built using a youtuber The Cherno's OpenGL tutorial:
+//https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
 
 
 struct ShaderSource {
@@ -120,15 +124,14 @@ int main(void)
         2, 3, 0,//down right
     };
 
-    //vao setup
-    unsigned int vao;
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
+
 
     //Buffers and binding vb to vao
+    VertexArray va;
     VertexBuffer vb(vertices, 4*2*sizeof(float));
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);//define the vertex buffer for the vao
-    glEnableVertexAttribArray(0);//enable buffer (at index 0) so it can be used for rendering
+    VertexBufferLayout layout;
+    layout.Push<float>(2);//setting up the layout of the vertices array with its type and stride
+    va.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
 
@@ -141,16 +144,16 @@ int main(void)
 
 
     //clear buffer bindings
-    GLCall(glBindVertexArray(0));
+    va.Unbind();
     GLCall(glUseProgram(0));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
+    vb.Unbind();
+    ib.Unbind();
 
 
     //uniform const in shader
     int location = glGetUniformLocation(shader, "u_Color");
     ASSERT(location != -1)
-    //GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
+    
     float r = 0.0f;
     float increment = 0.05f;
 
@@ -162,7 +165,7 @@ int main(void)
 
         GLCall(glUseProgram(shader));
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
-        GLCall(glBindVertexArray(vao));
+        va.Bind();
         ib.Bind();
 
         GLClearErrors();
