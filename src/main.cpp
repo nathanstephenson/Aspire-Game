@@ -50,6 +50,7 @@ int main(void)
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;//print opengl version
 
     {//provides a scope so that the application terminates correctly
+
     float vertices[] = {//each line is a vertex
         -0.5f, -0.5f,//bottom left (0)
          0.5f, -0.5f,//bottom right (1)
@@ -65,21 +66,19 @@ int main(void)
 
 
     //Buffers and binding vb to vao
-    VertexArray va;
+    VertexArray vao;
     VertexBuffer vb(vertices, 4*2*sizeof(float));
     VertexBufferLayout layout;
     layout.Push<float>(2);//setting up the layout of the vertices array with its type and stride
-    va.AddBuffer(vb, layout);
+    vao.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
-
-
     //clear buffer bindings
-    va.Unbind();
+    vao.Unbind();
     shader.Unbind();
     vb.Unbind();
     ib.Unbind();
@@ -98,7 +97,7 @@ int main(void)
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-        va.Bind();
+        vao.Bind();
         ib.Bind();
 
         GLClearErrors();
@@ -110,7 +109,6 @@ int main(void)
         } else if (r < 0.0f) {
             increment = 0.05f;
         }
-
         r += increment;
 
         /* Swap front and back buffers */
