@@ -12,6 +12,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
@@ -51,10 +52,10 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     {//provides a scope so that the application terminates correctly
 
     float vertices[] = {//each line is a vertex
-        -0.5f, -0.5f,//bottom left (0)
-         0.5f, -0.5f,//bottom right (1)
-         0.5f,  0.5f,//top right (2)
-        -0.5f,  0.5f,//top left (3)
+        -0.5f, -0.5f, 0.0f, 0.0f,//bottom left (0)
+         0.5f, -0.5f, 1.0f, 0.0f,//bottom right (1)
+         0.5f,  0.5f, 1.0f, 1.0f,//top right (2)
+        -0.5f,  0.5f, 0.0f, 1.0f,//top left (3)
     };
 
     unsigned int indices[] = {//each line is a triangle
@@ -66,15 +67,20 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     //Buffers and binding vb to vao
     VertexArray vao;
-    VertexBuffer vb(vertices, 4*2*sizeof(float));
+    VertexBuffer vb(vertices, 4*4*sizeof(float));
     VertexBufferLayout layout;
     layout.Push<float>(2);//setting up the layout of the vertices array with its type and stride
+    layout.Push<float>(2);//repeated to include texture coordinates
     vao.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+    Texture texture("res/textures/weirdKEKW.png");
+    texture.Bind();
+    shader.SetUniform1i("u_Texture", 0);//because texture is bound to slot 0 (as it is unspecified in the constructor)
 
     //clear buffer bindings
     vao.Unbind();
