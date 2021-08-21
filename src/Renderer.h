@@ -16,5 +16,6 @@ bool GLLogCall();
 
 class Renderer {
 public:
+    void Clear() const;
     void Draw(const VertexArray& vao, const IndexBuffer& ib, const Shader& shader) const;
 };

@@ -92,8 +92,8 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)){
         /* Render here */
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);//background colour
-        glClear(GL_COLOR_BUFFER_BIT);
+        //glClearColor(0.07f, 0.13f, 0.17f, 1.0f);//background colour
+        renderer.Clear();
 
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
