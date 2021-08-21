@@ -12,14 +12,12 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
-//using default types so that it is nicer to deal with non-opengl apis
 
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
 
 
-
-int main(void)
+int main(void)//using default types so that it is nicer to deal with non-opengl apis
 {
     GLFWwindow* window;
 
@@ -89,11 +87,11 @@ int main(void)
     float r = 0.0f;
     float increment = 0.05f;
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window)){
+    GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));//set background colour
+    
+    while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         /* Render here */
-        //glClearColor(0.07f, 0.13f, 0.17f, 1.0f);//background colour
-        renderer.Clear();
+        renderer.Clear();//clear frame to background colour
 
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
@@ -101,15 +99,15 @@ int main(void)
 
         GLClearErrors();
         renderer.Draw(vao, ib, shader);
-        //GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         ASSERT(GLLogCall());
 
-        if (r > 1.0f) {
+        if (r > 1.0f) {//animated colour by changing value of red
             increment = -0.05f;
         } else if (r < 0.0f) {
             increment = 0.05f;
         }
         r += increment;
+
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -117,7 +115,6 @@ int main(void)
         glfwPollEvents();
     }
 
-    
     //buffers and shader deleted by destructor as the scope ends
     }//end application scope before killing glfw
     glfwTerminate();
