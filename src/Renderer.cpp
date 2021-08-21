@@ -13,3 +13,10 @@ bool GLLogCall() {
     }
     return true;
 }
+
+void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ib, const Shader& shader) const{
+    shader.Bind();
+    vao.Bind();
+    ib.Bind();
+    GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+}
