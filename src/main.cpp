@@ -14,7 +14,7 @@
 #include "Shader.h"
 //using default types so that it is nicer to deal with non-opengl apis
 
-//Built using a youtuber The Cherno's OpenGL tutorial:
+//Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
 
 
