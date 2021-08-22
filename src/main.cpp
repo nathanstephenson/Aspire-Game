@@ -14,6 +14,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
 
@@ -33,7 +36,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 800, "Aspire", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Aspire", NULL, NULL);
     if (!window){
         glfwTerminate();
         return -1;
@@ -51,6 +54,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     {//provides a scope so that the application terminates correctly
 
+
     float vertices[] = {//each line is a vertex
         -0.5f, -0.5f, 0.0f, 0.0f,//bottom left (0)
          0.5f, -0.5f, 1.0f, 0.0f,//bottom right (1)
@@ -63,8 +67,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         2, 3, 0,//down right
     };
 
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
     GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
 
     //Buffers and binding vb to vao
     VertexArray vao;
@@ -75,9 +79,12 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     vao.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
+    //create projection matrix
+    glm::mat4 proj = glm::ortho(-3.2f, 3.2f, -1.8f, 1.8f, -1.0f, 1.0f);//setting the vertex boundaries of the window (to abide by 16:9 aspect ratio currently)
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+    shader.SetUniformMat4f("u_MVP", proj);//transforming vertices to match the already defined projection matrix
 
     Texture texture("res/textures/weirdKEKW.png");
     texture.Bind();
