@@ -23,6 +23,9 @@
 
 int main(void)//using default types so that it is nicer to deal with non-opengl apis
 {
+    float wWidth = 960.0f;
+    float wHeight = 540.0f;
+
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -36,7 +39,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(960, 540, "Aspire", NULL, NULL);
+    window = glfwCreateWindow(wWidth, wHeight, "Aspire", NULL, NULL);
     if (!window){
         glfwTerminate();
         return -1;
@@ -44,7 +47,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(1);//value of 1 binds it to the monitor's refresh rate, so VSync
 
     if (glewInit() != GLEW_OK) {//this needs to come after setting the window as openGL context
         std::cout << "Error with GLEW" << std::endl;
@@ -56,10 +59,10 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
 
     float vertices[] = {//each line is a vertex
-        -0.5f, -0.5f, 0.0f, 0.0f,//bottom left (0)
-         0.5f, -0.5f, 1.0f, 0.0f,//bottom right (1)
-         0.5f,  0.5f, 1.0f, 1.0f,//top right (2)
-        -0.5f,  0.5f, 0.0f, 1.0f,//top left (3)
+         100.0f, 100.0f, 0.0f, 0.0f,//bottom left (0)
+         200.0f, 100.0f, 1.0f, 0.0f,//bottom right (1)
+         200.0f, 200.0f, 1.0f, 1.0f,//top right (2)
+         100.0f, 200.0f, 0.0f, 1.0f,//top left (3)
     };
 
     unsigned int indices[] = {//each line is a triangle
@@ -80,7 +83,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     IndexBuffer ib(indices, 6);
 
     //create projection matrix
-    glm::mat4 proj = glm::ortho(-3.2f, 3.2f, -1.8f, 1.8f, -1.0f, 1.0f);//setting the vertex boundaries of the window (to abide by 16:9 aspect ratio currently)
+    glm::mat4 proj = glm::ortho(0.0f, wWidth, 0.0f, wHeight, -1.0f, 1.0f);//setting the vertex boundaries of the window to follow the (default) window size
+    //glm::mat4 proj = glm::ortho(-3.2f, 3.2f, -1.8f, 1.8f, -1.0f, 1.0f);//setting the vertex boundaries of the window (to abide by 16:9 aspect ratio currently)
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
@@ -99,28 +103,29 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     Renderer renderer;
 
     float r = 0.0f;
-    float increment = 0.05f;
+    float b = 1.0f;
+    float increment = 0.005f;
 
-    GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));//set background colour
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         /* Render here */
+        GLCall(glClearColor(r, 0.13f, b, 1.0f));//set background colour
         renderer.Clear();//clear frame to background colour
 
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-
         GLClearErrors();
-        renderer.Draw(vao, ib, shader);
+        renderer.Draw(vao, ib, shader);//Draw all
         ASSERT(GLLogCall());
 
         if (r > 1.0f) {//animated colour by changing value of red
-            increment = -0.05f;
+            increment = -0.005f;
         } else if (r < 0.0f) {
-            increment = 0.05f;
+            increment = 0.005f;
         }
         r += increment;
+        b -= increment;
 
 
         /* Swap front and back buffers */
