@@ -82,13 +82,15 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     vao.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
-    //create projection matrix
-    glm::mat4 proj = glm::ortho(0.0f, wWidth, 0.0f, wHeight, -1.0f, 1.0f);//setting the vertex boundaries of the window to follow the (default) window size
-    //glm::mat4 proj = glm::ortho(-3.2f, 3.2f, -1.8f, 1.8f, -1.0f, 1.0f);//setting the vertex boundaries of the window (to abide by 16:9 aspect ratio currently)
+    //create mvp matrix and apply to shader
+    glm::mat4 proj = glm::ortho(0.0f, wWidth, 0.0f, wHeight, -1.0f, 1.0f);//setting the vertex boundaries of the window to follow the (default) window size, so every unit is a pixel
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));//view matrix ("camera")
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));//model matrix
+    glm::mat4 mvp = proj * view * model;
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-    shader.SetUniformMat4f("u_MVP", proj);//transforming vertices to match the already defined projection matrix
+    shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
 
     Texture texture("res/textures/weirdKEKW.png");
     texture.Bind();
