@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/glm.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -27,6 +28,7 @@ public:
 	void SetUniform2f(const std::string& name, float v0, float v1);
 	void SetUniform3f(const std::string& name, float v0, float v1, float v2);
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 private:
 	ShaderSource ParseShader(const std::string& filepath);
 	unsigned int CompileShader(unsigned int type, const std::string& source);
