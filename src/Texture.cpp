@@ -22,7 +22,7 @@ Texture::Texture(const std::string& path) : m_RendererID(0), m_FilePath(path), m
 }
 
 Texture::~Texture(){
-	GLCall(glDeleteTextures(GL_TEXTURE_2D, &m_RendererID));
+	GLCall(glDeleteTextures(1, &m_RendererID));
 }
 
 void Texture::Bind(unsigned int slot) const{
