@@ -63,7 +63,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         2, 3, 0,//down right
     };
 
-
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
+    GLCall(glEnable(GL_BLEND));
 
     //Buffers and binding vb to vao
     VertexArray vao;
@@ -80,7 +81,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     Texture texture("res/textures/weirdKEKW.png");
     texture.Bind();
-    shader.SetUniform1i("u_Texture", 0);//because texture is bound to slot 0 (as it is unspecified in the constructor)
+    shader.SetUniform1i("u_Texture", 0);//0 because texture is bound to slot 0 (as it is unspecified in the constructor)
 
     //clear buffer bindings
     vao.Unbind();
