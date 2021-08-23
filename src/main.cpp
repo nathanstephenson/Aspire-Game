@@ -58,6 +58,11 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;//print opengl version
 
+    /* Init ImGUI */
+    ImGui::CreateContext();
+    ImGui_ImplGlfwGL3_Init(window, true);
+    ImGui::StyleColorsDark();
+
     {//provides a scope so that the application terminates correctly
 
 
@@ -104,10 +109,6 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     Renderer renderer;
 
-    ImGui::CreateContext();
-    ImGui_ImplGlfwGL3_Init(window, true);
-    ImGui::StyleColorsDark();
-
     glm::vec3 translationA(200, 200, 0);
     glm::vec3 translationB(400, 200, 0);
 
@@ -123,7 +124,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         GLCall(glClearColor(clear_color.x, clear_color.y, clear_color.z, 1.0f));//set background colour
         renderer.Clear();//clear frame to background colour
         ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
-        shader.Bind();
+        shader.Bind();//only need to bind once and all objects can be drawn
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);//model matrix
             glm::mat4 mvp = proj * view * model;
@@ -134,7 +135,6 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);//model matrix
             glm::mat4 mvp = proj * view * model;
             shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
-            //shader.Bind();
             GLClearErrors();
             renderer.Draw(vao, ib, shader);//Draw
             ASSERT(GLLogCall());
@@ -149,12 +149,11 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         b -= increment;
 
         {//imgui scope
-            ImGui::SliderFloat3("Position A", &translationA.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::SliderFloat3("Position B", &translationB.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3("Background", (float*)&clear_color); // Edit 3 floats representing a color
+            ImGui::SliderFloat3("Position A", &translationA.x, 0.0f, wWidth);          
+            ImGui::SliderFloat3("Position B", &translationB.x, 0.0f, wWidth);          
+            ImGui::ColorEdit3("Background", (float*)&clear_color); // Edit 3 floats representing a colour which becomes the background colour in the next frame
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
-
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
         /* Swap front and back buffers */
@@ -164,7 +163,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     }
 
     //buffers and shader deleted by destructor as the scope ends
-    }//end application scope before killing glfw
+    }//end application scope before killing glfw & imgui
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
