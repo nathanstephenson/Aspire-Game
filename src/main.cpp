@@ -62,10 +62,10 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
 
     float vertices[] = {//each line is a vertex
-         100.0f, 100.0f, 0.0f, 0.0f,//bottom left (0)
-         200.0f, 100.0f, 1.0f, 0.0f,//bottom right (1)
-         200.0f, 200.0f, 1.0f, 1.0f,//top right (2)
-         100.0f, 200.0f, 0.0f, 1.0f,//top left (3)
+         -50.0f, -50.0f, 0.0f, 0.0f,//bottom left (0)
+          50.0f, -50.0f, 1.0f, 0.0f,//bottom right (1)
+          50.0f,  50.0f, 1.0f, 1.0f,//top right (2)
+         -50.0f,  50.0f, 0.0f, 1.0f,//top left (3)
     };
 
     unsigned int indices[] = {//each line is a triangle
@@ -87,7 +87,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     //create mvp matrix and apply to shader
     glm::mat4 proj = glm::ortho(0.0f, wWidth, 0.0f, wHeight, -1.0f, 1.0f);//setting the vertex boundaries of the window to follow the (default) window size, so every unit is a pixel
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));//view matrix ("camera")
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));//view matrix ("camera")
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
@@ -108,7 +108,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
-    glm::vec3 translation(200, 200, 0);
+    glm::vec3 translationA(200, 200, 0);
+    glm::vec3 translationB(400, 200, 0);
 
     float r = 0.0f;
     float b = 1.0f;
@@ -120,21 +121,25 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         GLCall(glClearColor(clear_color.x, clear_color.y, clear_color.z, 1.0f));//set background colour
-        //GLCall(glClearColor(r, 0.13f, b, 1.0f));//set background colour
         renderer.Clear();//clear frame to background colour
         ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);//model matrix
-        glm::mat4 mvp = proj * view * model;
         shader.Bind();
-        shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
-
-        //shader.Unbind();
-        shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
-
-        GLClearErrors();
-        renderer.Draw(vao, ib, shader);//Draw all
-        ASSERT(GLLogCall());
-
+        {
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);//model matrix
+            glm::mat4 mvp = proj * view * model;
+            shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
+            renderer.Draw(vao, ib, shader);//Draw
+        }
+        {
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);//model matrix
+            glm::mat4 mvp = proj * view * model;
+            shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
+            //shader.Bind();
+            GLClearErrors();
+            renderer.Draw(vao, ib, shader);//Draw
+            ASSERT(GLLogCall());
+        }
+        
         if (r > 1.0f) {//animated colour by changing value of red
             increment = -0.005f;
         } else if (r < 0.0f) {
@@ -144,7 +149,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         b -= increment;
 
         {//imgui scope
-            ImGui::SliderFloat3("Position", &translation.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::SliderFloat3("Position A", &translationA.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::SliderFloat3("Position B", &translationB.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
             ImGui::ColorEdit3("Background", (float*)&clear_color); // Edit 3 floats representing a color
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
