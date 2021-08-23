@@ -14,8 +14,10 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw_gl3.h>
 
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
@@ -25,6 +27,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 {
     float wWidth = 960.0f;
     float wHeight = 540.0f;
+    unsigned int swapInterval = 1;
 
     GLFWwindow* window;
 
@@ -47,7 +50,7 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);//value of 1 binds it to the monitor's refresh rate, so VSync
+    glfwSwapInterval(swapInterval);//value of 1 binds it to the monitor's refresh rate, so VSync
 
     if (glewInit() != GLEW_OK) {//this needs to come after setting the window as openGL context
         std::cout << "Error with GLEW" << std::endl;
@@ -85,12 +88,9 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
     //create mvp matrix and apply to shader
     glm::mat4 proj = glm::ortho(0.0f, wWidth, 0.0f, wHeight, -1.0f, 1.0f);//setting the vertex boundaries of the window to follow the (default) window size, so every unit is a pixel
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));//view matrix ("camera")
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));//model matrix
-    glm::mat4 mvp = proj * view * model;
     Shader shader("res/shaders/shader.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-    shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
 
     Texture texture("res/textures/weirdKEKW.png");
     texture.Bind();
@@ -104,17 +104,31 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     Renderer renderer;
 
+    ImGui::CreateContext();
+    ImGui_ImplGlfwGL3_Init(window, true);
+    ImGui::StyleColorsDark();
+
+    glm::vec3 translation(200, 200, 0);
+
     float r = 0.0f;
     float b = 1.0f;
     float increment = 0.005f;
 
+    bool show_demo_window = true;//imgui variables
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
-        /* Render here */
-        GLCall(glClearColor(r, 0.13f, b, 1.0f));//set background colour
+        GLCall(glClearColor(clear_color.x, clear_color.y, clear_color.z, 1.0f));//set background colour
+        //GLCall(glClearColor(r, 0.13f, b, 1.0f));//set background colour
         renderer.Clear();//clear frame to background colour
-
+        ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);//model matrix
+        glm::mat4 mvp = proj * view * model;
         shader.Bind();
+        shader.SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
+
+        //shader.Unbind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
         GLClearErrors();
@@ -129,7 +143,14 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
         r += increment;
         b -= increment;
 
+        {//imgui scope
+            ImGui::SliderFloat3("Position", &translation.x, 0.0f, wWidth);          // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3("Background", (float*)&clear_color); // Edit 3 floats representing a color
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
 
+        ImGui::Render();
+        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
         /* Poll for and process events */
@@ -138,6 +159,8 @@ int main(void)//using default types so that it is nicer to deal with non-opengl 
 
     //buffers and shader deleted by destructor as the scope ends
     }//end application scope before killing glfw
+    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }
