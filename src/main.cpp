@@ -51,7 +51,6 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         return -1;
     }
 
-
     glfwMakeContextCurrent(window);
     glfwSwapInterval(swapInterval);//value of 1 binds it to the monitor's refresh rate, so VSync
 
@@ -61,16 +60,12 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
     }
 
-    
-
     /* Init ImGUI */
     ImGui::CreateContext();
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
     {//provides a scope so that the application terminates correctly
-
-
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
         
@@ -88,7 +83,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         renderer.Clear();//clear frame to background colour
 
         ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
-        if (currentTest) {
+        if (currentTest) {//runs the test when selected
             currentTest->OnUpdate(0.0f);
             currentTest->OnRender();
             ImGui::Begin("Test");
