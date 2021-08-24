@@ -21,6 +21,7 @@
 //Tests
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h""
+#include "tests/TestBatchingColor.h""
 
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
@@ -77,9 +78,10 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     currentTest = testMenu;
     testMenu->RegisterTest<test::TestClearColor>("Clear Color");//test for changing background colour
     testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");//test for changing background colour
+    testMenu->RegisterTest<test::TestBatchingColor>("RGBA Batching");//test for changing background colour
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
-        GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+        GLCall(glClearColor(0.05f, 0.05f, 0.05f, 1.0f));
         renderer.Clear();//clear frame to background colour
 
         ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
