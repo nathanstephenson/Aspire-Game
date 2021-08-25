@@ -67,12 +67,11 @@ namespace test {
         m_Texture0->Bind(0);//each texture must be bound to its slot for rendering
         m_Texture1->Bind(1);
 
-        m_Shader->Bind();//only need to bind once and all objects can be drawn
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);//model matrix
             glm::mat4 mvp = m_Proj * m_View * model;
             m_Shader->SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
-            renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);//Draw
+            renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);//Draw. All 3 are bound in this call
         }
 	}
 
