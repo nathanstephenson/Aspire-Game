@@ -92,14 +92,13 @@ namespace test {
               50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (1)
               50.0f,  50.0f,  1.0f, 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (2)
              -50.0f,  50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (3)
-                                                                   
+
               50.0f,  50.0f, 1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,//bottom left (4)
              250.0f,  50.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (5)
              250.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (6)
               50.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (7)
         };
-        m_Shader->Bind();
-        m_VertexBuffer->UpdateData(vertices);//seems like there is an issue here with updating the correct buffer for it to be redrawn, the data is inserted properly however
+        m_VertexBuffer->UpdateData(vertices, sizeof(vertices));
 	}
 
 	void TestDynamicGeometry::OnRender(){
@@ -107,7 +106,6 @@ namespace test {
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
         Renderer renderer;
 
-        m_Shader->Bind();
         m_Shader->SetUniform1i("u_Textures[0]", 0);
         m_Shader->SetUniform1i("u_Textures[1]", 1);
         m_Texture0->Bind(0);//each texture must be bound to its slot for rendering
