@@ -23,6 +23,7 @@
 #include "tests/TestTexture2D.h""
 #include "tests/TestBatchingColor.h""
 #include "tests/TestBatchingTexture.h""
+#include "tests/TestDynamicGeometry.h""
 
 //Built using youtube channel The Cherno's OpenGL tutorial:
 //https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
@@ -81,6 +82,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
     testMenu->RegisterTest<test::TestBatchingColor>("RGBA Batching");
     testMenu->RegisterTest<test::TestBatchingTexture>("Textured Batching");
+    testMenu->RegisterTest<test::TestDynamicGeometry>("Dynamic Geometry");
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         GLCall(glClearColor(0.05f, 0.05f, 0.05f, 1.0f));
