@@ -3,40 +3,41 @@
 
 #include "TestDynamicGeometry.h"
 
-struct Vertex {
-    float Position[2];
-    float Color[4];
-    float TexPos[2];
-    float TexIndex;
-};
-
 namespace test {
 
-    /*static std::array<Vertex, 4> CreateQuad(float x, float y) {
+    struct Vertex {
+        vec2 Position;
+        vec4 Color;
+        vec2 TexPos;
+        float TexIndex;
+    };
+
+    static std::array<Vertex, 4>CreateQuad(float x, float y, float textureID) {
+        float size = 100.0f;
         Vertex v0;
-        v0.Position = { -50.0f, -50.0f };
+        v0.Position = { x, y };
         v0.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
         v0.TexPos = { 0.0f, 0.0f };
-        v0.TexIndex = 0.0f;
+        v0.TexIndex = textureID;
         Vertex v1;
-        v1.Position = { -50.0f, -50.0f };
+        v1.Position = {x + size, y };
         v1.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
-        v1.TexPos = { 0.0f, 0.0f };
-        v1.TexIndex = 0.0f;
+        v1.TexPos = { 1.0f, 0.0f };
+        v1.TexIndex = textureID;
         Vertex v2;
-        v2.Position = { -50.0f, -50.0f };
-        v2.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
-        v2.TexPos = { 0.0f, 0.0f };
-        v2.TexIndex = 0.0f;
+        v2.Position = { x + size,  y + size };
+        v2.Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+        v2.TexPos = { 1.0f, 1.0f };
+        v2.TexIndex = textureID;
         Vertex v3;
-        v3.Position = { -50.0f, -50.0f };
+        v3.Position = { x,  y + size };
         v3.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
-        v3.TexPos = { 0.0f, 0.0f };
-        v3.TexIndex = 0.0f;
-        return { v0, v1, v2, v3 };
-    }*/
+        v3.TexPos = { 0.0f, 1.0f };
+        v3.TexIndex = textureID;
+        return {v0, v1, v2, v3};
+    }
 
-	TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0),
+    TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0),
             m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))){
         float vertices[] = {//each line is a vertex: with an rgba value associated to it, and then texture coordinates and texture index on that (index -1 would mean to use colours instead)
             //  x       y      r     g      b     a     tx    ty    ti
@@ -86,19 +87,25 @@ namespace test {
 	}
 
 	void TestDynamicGeometry::OnUpdate(float deltaTime){
-        float vertices[] = {//each line is a vertex: with an rgba value associated to it, and then texture coordinates and texture index on that (index -1 would mean to use colours instead)
-            //  x       y      r     g      b     a     tx    ty    ti
-             -50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 0.0f, -1.0f,//bottom left (0)
-              50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (1)
-              50.0f,  50.0f,  1.0f, 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (2)
-             -50.0f,  50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (3)
+        //float vertices[] = {//each line is a vertex: with an rgba value associated to it, and then texture coordinates and texture index on that (index -1 would mean to use colours instead)
+        //    //  x       y      r     g      b     a     tx    ty    ti
+        //     -50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 0.0f, -1.0f,//bottom left (0)
+        //      50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (1)
+        //      50.0f,  50.0f,  1.0f, 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (2)
+        //     -50.0f,  50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (3)
 
-              50.0f,  50.0f, 1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,//bottom left (4)
-             250.0f,  50.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (5)
-             250.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (6)
-              50.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (7)
-        };
-        m_VertexBuffer->UpdateData(vertices, sizeof(vertices));
+        //      50.0f,  50.0f, 1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,//bottom left (4)
+        //     250.0f,  50.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 0.0f, -1.0f,//bottom right (5)
+        //     250.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 1.0f, 1.0f, -1.0f,//top right (6)
+        //      50.0f, 250.0f, 1.0f, 0.96f, 0.24f, 1.0f, 0.0f, 1.0f, -1.0f,//top left (7)
+        //};
+
+        auto q0 = CreateQuad(m_QuadPos[0], m_QuadPos[1], 0.0f);
+        auto q1 = CreateQuad( 50.0f,  50.0f, -1.0f);
+        Vertex vertices[8];
+        memcpy(vertices, q0.data(), q0.size()*sizeof(Vertex));
+        memcpy(vertices + q0.size(), q1.data(), q1.size()*sizeof(Vertex));
+        m_VertexBuffer->UpdateData(vertices, 8*sizeof(Vertex));
 	}
 
 	void TestDynamicGeometry::OnRender(){
@@ -122,5 +129,9 @@ namespace test {
 	void TestDynamicGeometry::OnImGuiRender(){
         ImGui::SliderFloat3("Position", &m_TranslationA.x, 0.0f, 960.0f);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+        ImGui::Begin("QuadPos");
+        ImGui::DragFloat2("Quad Position", m_QuadPos, 1.0f);
+        ImGui::End();
 	}
 }
