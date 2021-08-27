@@ -37,8 +37,8 @@ namespace test {
         return {v0, v1, v2, v3};
     }
 
-    TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0),
-            m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))){
+    TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), m_CameraTranslation(-200, 0, 0),
+            m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), m_View(glm::translate(glm::mat4(1.0f), glm::vec3(m_CameraTranslation))){
         float vertices[] = {//each line is a vertex: with an rgba value associated to it, and then texture coordinates and texture index on that (index -1 would mean to use colours instead)
             //  x       y      r     g      b     a     tx    ty    ti
              -50.0f, -50.0f, 0.18f, 0.6f, 0.96f, 1.0f, 0.0f, 0.0f, 0.0f,//bottom left (0)
@@ -120,7 +120,8 @@ namespace test {
 
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);//model matrix
-            glm::mat4 mvp = m_Proj * m_View * model;
+            glm::mat4 view = glm::translate(glm::mat4(1.0f), m_CameraTranslation);//view matrix
+            glm::mat4 mvp = m_Proj * view * model;
             m_Shader->SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
             renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);//Draw. All 3 are bound in this call
         }
@@ -128,6 +129,7 @@ namespace test {
 
 	void TestDynamicGeometry::OnImGuiRender(){
         ImGui::SliderFloat3("Position", &m_TranslationA.x, 0.0f, 960.0f);
+        ImGui::SliderFloat3("Camera", &m_CameraTranslation.x, 0.0f, 960.0f);
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
         ImGui::Begin("QuadPos");

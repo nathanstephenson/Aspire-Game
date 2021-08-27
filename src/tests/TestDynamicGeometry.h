@@ -33,7 +33,7 @@ namespace test {
 		std::unique_ptr<Texture> m_Texture1;
 
 		glm::mat4 m_Proj, m_View;//projection and view matrices
-		glm::vec3 m_TranslationA, m_TranslationB;
+		glm::vec3 m_TranslationA, m_TranslationB, m_CameraTranslation;
 		float m_QuadPos[2] = { -50.0f, -50.0f };
 	public:
 		TestDynamicGeometry();
