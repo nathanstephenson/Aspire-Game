@@ -5,13 +5,6 @@
 
 namespace test {
 
-    struct Vertex {
-        vec2 Position;
-        vec4 Color;
-        vec2 TexPos;
-        float TexIndex;
-    };
-
     static std::array<Vertex, 4>CreateQuad(float x, float y, float textureID) {
         float size = 100.0f;
         Vertex v0;

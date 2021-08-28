@@ -23,6 +23,13 @@ namespace test {
 		float x, y, z, w;
 	};
 
+	struct Vertex {
+		vec2 Position;
+		vec4 Color;
+		vec2 TexPos;
+		float TexIndex;
+	};
+
 	class TestDynamicGeometry : public Test {
 	private:
 		std::unique_ptr<VertexArray> m_VAO;
