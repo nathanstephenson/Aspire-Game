@@ -18,6 +18,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "EventHandler.h"
 //Tests
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h""
@@ -25,9 +26,19 @@
 #include "tests/TestBatchingTexture.h""
 #include "tests/TestDynamicGeometry.h""
 
-//Built using youtube channel The Cherno's OpenGL tutorial:
-//https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
 
+EventHandler e;
+static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {//doesn't wait for polling
+    e.KeyCallback(window, key, scancode, action, mods);
+}
+
+static void CursorCallback(GLFWwindow* window, double xpos, double ypos) {
+    e.CursorCallback(window, xpos, ypos);
+}
+
+static void MouseCallback(GLFWwindow* window, int button, int action, int mods) {
+    e.MouseCallback(window, button, action, mods);
+}
 
 int main(void){//using default types so that it is nicer to deal with non-opengl apis
 
@@ -68,6 +79,10 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
+    glfwSetKeyCallback(glfwGetCurrentContext(), KeyCallback);
+    glfwSetCursorPosCallback(glfwGetCurrentContext(), CursorCallback);
+    glfwSetMouseButtonCallback(glfwGetCurrentContext(), MouseCallback);
+
     {//provides a scope so that the application terminates correctly
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
@@ -83,6 +98,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     testMenu->RegisterTest<test::TestBatchingColor>("RGBA Batching");
     testMenu->RegisterTest<test::TestBatchingTexture>("Textured Batching");
     testMenu->RegisterTest<test::TestDynamicGeometry>("Dynamic Geometry");
+    EventHandler eventHandler;
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         GLCall(glClearColor(0.05f, 0.05f, 0.05f, 1.0f));
@@ -106,6 +122,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
         /* Poll for and process events */
+        eventHandler.Poll();
         glfwPollEvents();
     }
 
@@ -121,3 +138,8 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     glfwTerminate();
     return 0;
 }
+
+
+
+//Inspired by The Cherno's OpenGL tutorial:
+//https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2
