@@ -43,7 +43,7 @@ namespace test {
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
         m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
 
-        m_Shader = std::make_unique<Shader>("res/shaders/texture.shader");
+        m_Shader = std::make_unique<Shader>("res/shaders/shader.shader");
         m_Shader->Bind();
 
         m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");

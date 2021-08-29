@@ -30,7 +30,7 @@ namespace test {
         return {v0, v1, v2, v3};
     }
 
-    TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), m_CameraTranslation(-200, 0, 0),
+    TestDynamicGeometry::TestDynamicGeometry() : m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), m_CameraTranslation(0, 0, 0),
             m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), m_View(glm::translate(glm::mat4(1.0f), glm::vec3(m_CameraTranslation))){
         float vertices[] = {//each line is a vertex: with an rgba value associated to it, and then texture coordinates and texture index on that (index -1 would mean to use colours instead)
             //  x       y      r     g      b     a     tx    ty    ti
@@ -69,7 +69,7 @@ namespace test {
         m_VAO->AddBuffer(*m_VertexBuffer, layout);//needs to come after updateData
         m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 12);
 
-        m_Shader = std::make_unique<Shader>("res/shaders/texture.shader");
+        m_Shader = std::make_unique<Shader>("res/shaders/shader.shader");
         m_Shader->Bind();
 
         m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
