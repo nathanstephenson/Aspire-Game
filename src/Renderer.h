@@ -14,6 +14,25 @@
 void GLClearErrors();
 bool GLLogCall();
 
+struct vec2 {
+	float x, y;
+};
+
+struct vec3 {
+	float x, y, z;
+};
+
+struct vec4 {
+	float x, y, z, w;
+};
+
+struct Vertex {
+	vec2 Position;
+	vec4 Color;
+	vec2 TexPos;
+	float TexIndex;
+};
+
 class Renderer {
 public:
     void Clear() const;
