@@ -18,6 +18,41 @@ void EventHandler::Wait() {
 
 void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {//doesn't wait for polling
 	std::cout << key << " " << scancode << " " << action << " " << mods << std::endl;
+	vec2 charVel = m_app->GetCharVel();
+	switch (key) {
+	case (65):
+		if (action == 1) {
+			m_app->SetCharVel(-25.0, charVel.y);
+		}
+		else if (action == 0) {
+			m_app->SetCharVel(0, charVel.y);
+		}
+		break;
+	case (68):
+		if (action == 1) {
+			m_app->SetCharVel(25.0, charVel.y);
+		}
+		else if (action == 0) {
+			m_app->SetCharVel(0, charVel.y);
+		}
+		break;
+	case (83):
+		if (action == 1) {
+			m_app->SetCharVel(charVel.x, -25.0);
+		}
+		else if (action == 0) {
+			m_app->SetCharVel(charVel.x, 0);
+		}
+		break;
+	case (87):
+		if (action == 1) {
+			m_app->SetCharVel(charVel.x, 25.0);
+		}
+		else if (action == 0) {
+			m_app->SetCharVel(charVel.x, 0);
+		}
+		break;
+	}
 }
 
 void EventHandler::CursorCallback(GLFWwindow* window, double xpos, double ypos) {
@@ -28,10 +63,10 @@ void EventHandler::CursorCallback(GLFWwindow* window, double xpos, double ypos) 
 }
 
 void EventHandler::MouseCallback(GLFWwindow* window, int button, int action, int mods) {
-	std::cout << button << " " << action << " " << mods << std::endl;
+	//std::cout << button << " " << action << " " << mods << std::endl;
 	vec2 cursor = m_app->GetCursorPos();
 	if (button==0 && action==0) {//left click release
-		std::cout << cursor.x << " " << cursor.y << std::endl;
+		std::cout << "Cursor at (" << cursor.x << ", " << cursor.y << "); Rendered in " << m_app->GetDelta()*1000 << "ms" << std::endl;
 	}
 }
 

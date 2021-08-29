@@ -19,6 +19,8 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "EventHandler.h"
+#include "Application.h"
+
 //Tests
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h""
@@ -27,15 +29,13 @@
 #include "tests/TestDynamicGeometry.h""
 
 
-EventHandler e;
+EventHandler e;//manages user inputs
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {//doesn't wait for polling
     e.KeyCallback(window, key, scancode, action, mods);
 }
-
 static void CursorCallback(GLFWwindow* window, double xpos, double ypos) {
     e.CursorCallback(window, xpos, ypos);
 }
-
 static void MouseCallback(GLFWwindow* window, int button, int action, int mods) {
     e.MouseCallback(window, button, action, mods);
 }
@@ -79,15 +79,20 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
+    //Tell OpenGL how to handle inputs
     glfwSetKeyCallback(glfwGetCurrentContext(), KeyCallback);
     glfwSetCursorPosCallback(glfwGetCurrentContext(), CursorCallback);
     glfwSetMouseButtonCallback(glfwGetCurrentContext(), MouseCallback);
+    //glfwSetWindowSizeCallback(window, window_size_callback);
 
     {//provides a scope so that the application terminates correctly
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//tells OpenGL how to blend alpha pixels (which also allows transparency)
-        
+    
+    //Create renderer & application layer and attach it to event handler
     Renderer renderer;
+    Application app;
+    e.SetApplication(&app);
 
     //Testing interface
     test::Test* currentTest = nullptr;
@@ -103,18 +108,23 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         GLCall(glClearColor(0.05f, 0.05f, 0.05f, 1.0f));
         renderer.Clear();//clear frame to background colour
 
+
         ImGui_ImplGlfwGL3_NewFrame();//new imgui frame
-        if (currentTest) {//runs the test when selected
-            currentTest->OnUpdate(0.0f);
-            currentTest->OnRender();
-            ImGui::Begin("Test");
-            if (currentTest != testMenu && ImGui::Button("<-")) {//if there is a current test, gives the option to go back
-                delete currentTest;
-                currentTest = testMenu;
-            }
-            currentTest->OnImGuiRender();
-            ImGui::End();
-        }
+        //if (currentTest) {//enables tests registered above
+        //    currentTest->OnUpdate(0.0f);
+        //    currentTest->OnRender();
+        //    ImGui::Begin("Test");
+        //    if (currentTest != testMenu && ImGui::Button("<-")) {//if there is a current test, gives the option to go back
+        //        delete currentTest;
+        //        currentTest = testMenu;
+        //    } 
+        //    currentTest->OnImGuiRender();
+        //    ImGui::End();
+        //}
+        app.OnUpdate();//takes delta time
+        app.OnRender();
+        app.OnImGuiRender();
+        
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -123,21 +133,20 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         /* Poll for and process events */
         e.Poll();
         glfwPollEvents();
-    }
-
-    //buffers and shader deleted by destructor as the scope ends
+    }//Window Closed
+    
     //Delete testing environment
     if (currentTest != testMenu) {
         delete testMenu;
     }
     delete currentTest;
-    }//end application scope before killing glfw & imgui
+    //buffers and shader deleted by destructor as the scope ends
+    }//end application scope before killing glfw & imgui. event handler is killed when the application is fully closed (after "return 0" below).
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }
-
 
 
 //Inspired by The Cherno's OpenGL tutorial:

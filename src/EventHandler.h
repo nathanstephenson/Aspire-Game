@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "Renderer.h"
+//#include "Renderer.h"
 #include "Application.h"
 
 enum EventType { KbInput, MInput, MMove };
