@@ -98,7 +98,6 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     testMenu->RegisterTest<test::TestBatchingColor>("RGBA Batching");
     testMenu->RegisterTest<test::TestBatchingTexture>("Textured Batching");
     testMenu->RegisterTest<test::TestDynamicGeometry>("Dynamic Geometry");
-    EventHandler eventHandler;
     
     while (!glfwWindowShouldClose(window)){//Loop until the user closes the window
         GLCall(glClearColor(0.05f, 0.05f, 0.05f, 1.0f));
@@ -122,7 +121,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
         /* Poll for and process events */
-        eventHandler.Poll();
+        e.Poll();
         glfwPollEvents();
     }
 
