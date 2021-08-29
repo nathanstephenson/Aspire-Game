@@ -4,12 +4,15 @@
 
 #include <iostream>
 
+#include "Renderer.h"
+#include "Application.h"
+
 enum EventType { KbInput, MInput, MMove };
 
 class EventHandler {
 private:
-	float cursorX;
-	float cursorY;
+	vec2 m_cursorPos;
+	Application* m_app;
 public:
 	EventHandler();
 	~EventHandler();
@@ -18,4 +21,5 @@ public:
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void CursorCallback(GLFWwindow* window, double xpos, double ypos);
 	void MouseCallback(GLFWwindow* window, int button, int action, int mods);
+	void SetApplication(Application* app);
 };
