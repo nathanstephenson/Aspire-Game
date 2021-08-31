@@ -39,11 +39,15 @@ static void CursorCallback(GLFWwindow* window, double xpos, double ypos) {
 static void MouseCallback(GLFWwindow* window, int button, int action, int mods) {
     e.MouseCallback(window, button, action, mods);
 }
+static void WindowSizeCallback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+    e.WindowSizeCallback(window, width, height);
+}
 
 int main(void){//using default types so that it is nicer to deal with non-opengl apis
 
-    float wWidth = 960.0f;
-    float wHeight = 540.0f;
+    int wWidth = 960;
+    int wHeight = 540;
     unsigned int swapInterval = 1;
 
     GLFWwindow* window;
@@ -83,7 +87,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     glfwSetKeyCallback(glfwGetCurrentContext(), KeyCallback);
     glfwSetCursorPosCallback(glfwGetCurrentContext(), CursorCallback);
     glfwSetMouseButtonCallback(glfwGetCurrentContext(), MouseCallback);
-    //glfwSetWindowSizeCallback(window, window_size_callback);
+    glfwSetWindowSizeCallback(glfwGetCurrentContext(), WindowSizeCallback);
 
     {//provides a scope so that the application terminates correctly
     GLCall(glEnable(GL_BLEND));
@@ -91,7 +95,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
     
     //Create renderer & application layer and attach it to event handler
     Renderer renderer;
-    Application app;
+    Application app(wWidth, wHeight);
     e.SetApplication(&app);
 
     //Testing interface

@@ -10,7 +10,7 @@
 
 class Application {
 public:
-	Application();
+	Application(float windowWidth, float windowHeight);
 	~Application();
 
 	void OnUpdate();
@@ -22,6 +22,8 @@ public:
 	void SetCharVel(float x, float y);
 	vec2 GetCharVel();
 	float GetDelta();
+	void SetWindowSize(float x, float y);
+	vec2 GetWindowSize();
 private:
 	vec2 m_CursorPos;
 	vec2 m_CharPos;

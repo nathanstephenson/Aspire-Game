@@ -25,7 +25,9 @@ static std::array<Vertex, 4>CreateQuad(float x, float y, float textureID) {
     return { v0, v1, v2, v3 };
 }
 
-Application::Application() : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0) {
+Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0) {
+    SetWindowSize(windowWidth, windowHeight);
+    m_CharPos = {m_WindowSize.x / 2, m_WindowSize.y / 2 };
     unsigned int indices[] = {//each line is a triangle
         0, 1, 2,//up left
         2, 3, 0,//down right
@@ -59,6 +61,7 @@ Application::~Application() {
 void Application::OnUpdate() {
 	m_deltaTime = glfwGetTime() - m_lastFrameTime;
     frameCount += 1;
+
     m_CharPos = {m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime)};//position changes based on velocity and deltatime
     auto q0 = CreateQuad(m_CharPos.x, m_CharPos.y, 0.0f);
     auto q1 = CreateQuad(50.0f, 50.0f, -1.0f);
@@ -79,12 +82,17 @@ void Application::OnRender() {
     m_Texture1->Bind(1);
 
     {
-        float cursorMovementMultiplier = 0.075;
-        glm::vec3 mTranslation = glm::vec3({ -m_CursorPos.x * cursorMovementMultiplier, -m_CursorPos.y * cursorMovementMultiplier, 0.0f });
-        glm::mat4 m_Proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+        float cursorMovementMultiplier = 0.05;
+
+        glm::mat4 m_Proj = glm::ortho(0.0f, m_WindowSize.x, 0.0f, m_WindowSize.y, -1.0f, 1.0f);
+        glm::vec3 mouseTranslation = glm::vec3({ -m_CursorPos.x * cursorMovementMultiplier, -m_CursorPos.y * cursorMovementMultiplier, 0.0f });
+        glm::vec3 moveTranslation = glm::vec3({ m_WindowSize.x/2-m_CharPos.x, m_WindowSize.y/2-m_CharPos.y, 0.0f });
+        glm::mat4 viewMove = glm::translate(glm::mat4(1.0f), moveTranslation);//view matrix
+        glm::mat4 viewMouse = glm::translate(glm::mat4(1.0f), mouseTranslation);//view matrix
+        glm::mat4 view = viewMouse*viewMove;//view matrix
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3({ 0.0f, 0.0f, 0.0f }));//model matrix
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), mTranslation);//view matrix
         glm::mat4 mvp = m_Proj * view * model;
+
         m_Shader->SetUniformMat4f("u_MVP", mvp);//transforming vertices to match the already defined mvp matrix
         renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);//Draw all bound data. All 3 are bound in this call.
     }
@@ -115,4 +123,12 @@ vec2 Application::GetCharVel() {
 
 float Application::GetDelta() {
 	return m_deltaTime;
+}
+
+void Application::SetWindowSize(float x, float y) {
+    m_WindowSize = {x, y};
+}
+
+vec2 Application::GetWindowSize() {
+    return m_WindowSize;
 }

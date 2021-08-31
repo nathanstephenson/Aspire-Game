@@ -21,5 +21,6 @@ public:
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void CursorCallback(GLFWwindow* window, double xpos, double ypos);
 	void MouseCallback(GLFWwindow* window, int button, int action, int mods);
+	void WindowSizeCallback(GLFWwindow* window, int width, int height);
 	void SetApplication(Application* app);
 };
