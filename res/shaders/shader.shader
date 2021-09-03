@@ -30,7 +30,7 @@ in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TexIndex;
 
-uniform sampler2D u_Textures[2];
+uniform sampler2D u_Textures[32];
 
 void main(){
 	int index = int(v_TexIndex);
