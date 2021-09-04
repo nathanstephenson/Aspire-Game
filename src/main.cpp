@@ -125,7 +125,7 @@ int main(void){//using default types so that it is nicer to deal with non-opengl
         //    currentTest->OnImGuiRender();
         //    ImGui::End();
         //}
-        app.OnUpdate();//takes delta time
+        app.OnUpdate();
         app.OnRender();
         app.OnImGuiRender();
         
