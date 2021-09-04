@@ -23,7 +23,9 @@ void BufferController::AddObject() {
 void BufferController::RemoveObject() {
 }
 
-void BufferController::UpdateObject() {
+void BufferController::UpdateObject(Vertex* vertices, unsigned int vsize, unsigned int* indices, unsigned int isize) {
+    SetVertices(vertices, vsize/sizeof(Vertex));
+    SetIndices(indices, isize/sizeof(unsigned int));
 }
 
 void BufferController::BindBuffers() {
@@ -34,10 +36,10 @@ void BufferController::BindBuffers() {
 }
 
 void BufferController::UnbindBuffers() {
-    m_IndexBuffer->Unbind();
-    m_VertexBuffer->Unbind();
-    m_VAO->Unbind();
     m_Shader->Unbind();
+    m_VAO->Unbind();
+    m_VertexBuffer->Unbind();
+    m_IndexBuffer->Unbind();
 }
 
 void BufferController::BindTextureSlots(unsigned int start, unsigned int end) {

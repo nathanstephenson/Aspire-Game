@@ -10,7 +10,7 @@ public:
 	~BufferController();
 	void AddObject();
 	void RemoveObject();
-	void UpdateObject();
+	void UpdateObject(Vertex* vertices, unsigned int vsize, unsigned int* indices, unsigned int isize);
 	void BindBuffers();
 	void UnbindBuffers();
 	void BindTextureSlots(unsigned int start, unsigned int end);//max end is 32
@@ -20,8 +20,8 @@ private:
 	std::unique_ptr<VertexBuffer> m_VertexBuffer;
 	std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	std::unique_ptr<Shader> m_Shader;
-	Vertex* m_Vertices;
-	unsigned int* m_Indices;
+	Vertex m_Vertices[1000];
+	unsigned int m_Indices[1500];
 
 	void SetVertices(Vertex* vertices, unsigned int count);//size is number of vertices
 	void SetIndices(unsigned int* indices, unsigned int count);//size is number of indices

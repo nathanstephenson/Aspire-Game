@@ -6,7 +6,32 @@
 #include "Renderer.h"
 #include "VertexBufferLayout.h"
 #include "Texture.h"
+#include "BufferController.h"
 
+static std::array<Vertex, 4>CreateQuad(float x, float y, float textureID) {
+	float size = 100.0f;
+	Vertex v0;
+	v0.Position = { x, y };
+	v0.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
+	v0.TexPos = { 0.0f, 0.0f };
+	v0.TexIndex = textureID;
+	Vertex v1;
+	v1.Position = { x + size, y };
+	v1.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
+	v1.TexPos = { 1.0f, 0.0f };
+	v1.TexIndex = textureID;
+	Vertex v2;
+	v2.Position = { x + size,  y + size };
+	v2.Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	v2.TexPos = { 1.0f, 1.0f };
+	v2.TexIndex = textureID;
+	Vertex v3;
+	v3.Position = { x,  y + size };
+	v3.Color = { 0.18f, 0.6f, 0.96f, 1.0f };
+	v3.TexPos = { 0.0f, 1.0f };
+	v3.TexIndex = textureID;
+	return { v0, v1, v2, v3 };
+}
 
 class Application {
 public:
@@ -33,10 +58,7 @@ private:
 	float m_deltaTime;
 	int frameCount = 0;
 
-	std::unique_ptr<VertexArray> m_VAO;
-	std::unique_ptr<VertexBuffer> m_VertexBuffer;
-	std::unique_ptr<IndexBuffer> m_IndexBuffer;
-	std::unique_ptr<Shader> m_Shader;
 	std::unique_ptr<Texture> m_Texture0;
 	std::unique_ptr<Texture> m_Texture1;
+	std::unique_ptr<BufferController> m_BufferController;
 };
