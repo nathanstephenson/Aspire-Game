@@ -7,6 +7,7 @@
 #include "VertexBufferLayout.h"
 #include "Texture.h"
 #include "BufferController.h"
+#include "ObjectController.h"
 
 static std::array<Vertex, 4>CreateQuad(float x, float y, float textureID) {
 	float size = 100.0f;
@@ -61,4 +62,5 @@ private:
 	std::unique_ptr<Texture> m_Texture0;
 	std::unique_ptr<Texture> m_Texture1;
 	std::unique_ptr<BufferController> m_BufferController;
+	std::unique_ptr<ObjectController> m_ObjectContainer;
 };

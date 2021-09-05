@@ -1,11 +1,13 @@
 #include "Application.h"
 
 
-Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0) {
+Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0),
+        m_BufferController(std::make_unique<BufferController>()), m_ObjectContainer(std::make_unique<ObjectController>()){
     SetWindowSize(windowWidth, windowHeight);
     m_CharPos = {m_WindowSize.x / 2, m_WindowSize.y / 2 };
     
-    m_BufferController = std::make_unique<BufferController>();
+    //m_BufferController = std::make_unique<BufferController>();
+    //m_ObjectContainer = std::make_unique<ObjectContainer>();
 
     m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
     m_Texture1 = std::make_unique<Texture>("res/textures/hands.png");
