@@ -2,12 +2,11 @@
 
 
 Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0),
-        m_BufferController(std::make_unique<BufferController>()), m_ObjectContainer(std::make_unique<ObjectController>()){
+        m_BufferController(std::make_unique<BufferController>()), m_ObjectContainer(std::make_unique<ObjectController>("filpath")){
     SetWindowSize(windowWidth, windowHeight);
     m_CharPos = {m_WindowSize.x / 2, m_WindowSize.y / 2 };
     
-    //m_BufferController = std::make_unique<BufferController>();
-    //m_ObjectContainer = std::make_unique<ObjectContainer>();
+    //objects are batch loaded into the objectcontroller for a scene, then rendered dynamically using the buffercontroller
 
     m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
     m_Texture1 = std::make_unique<Texture>("res/textures/hands.png");
