@@ -11,13 +11,24 @@ private:
 	float m_Rotation;
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
+	ObjectType m_Type;
 public:
-	Object() : m_VertexPosition(0), m_Size({ 0.0, 0.0 }), m_Origin({ 0.0, 0.0 }), m_Vertices({}), m_Indices({}), m_Rotation(0) {}
+	Object() : m_VertexPosition(0), m_Size({ 0.0, 0.0 }), m_Origin({ 0.0, 0.0 }), m_Rotation(0), m_Vertices({}), m_Indices({}), m_Type(blank) {}
 	virtual ~Object() {}
 
 	virtual void OnUpdate(float deltaTime) {}
 	virtual void OnRender() {}
 	virtual void OnImGuiRender() {}
+
+	void Transform(float x, float y, float z, float rotation) {
+		std::vector<Vertex> v = GetVertices();
+		for (unsigned int i = 0; i < v.size(); i++) {
+			v[i].Position.x += x;
+			v[i].Position.y += y;
+		}
+		SetVertices(v);
+		SetOrigin(v[0].Position.x, v[0].Position.y);
+	}
 
 	void SetVertexPosition(unsigned int i) { m_VertexPosition = i; }
 	unsigned int GetVertexPosition() { return m_VertexPosition; }

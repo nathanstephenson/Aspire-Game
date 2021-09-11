@@ -35,6 +35,10 @@ struct Vertex {
 	float TexIndex;
 };
 
+enum ObjectType {
+	blank, quad
+};
+
 class Renderer {
 public:
     void Clear() const;

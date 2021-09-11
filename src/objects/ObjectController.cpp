@@ -10,8 +10,15 @@ ObjectController::~ObjectController() {
 	}
 }
 
-void ObjectController::AddObject() {
-	m_Objects.push_back(new Object());
+void ObjectController::AddObject(ObjectType obj) {
+	switch (obj) {
+		case blank:
+			m_Objects.push_back(new Object());
+			break;
+		case quad:
+			m_Objects.push_back(new Quad());
+			break;
+	}
 }
 
 void ObjectController::RemoveObject(unsigned int index) {

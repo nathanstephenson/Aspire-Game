@@ -3,18 +3,15 @@
 #include <vector>
 #include <iostream>
 #include <functional>
-
-#include "Object.h"
+//object types
+#include "Quad.h"
 
 class ObjectController : public Object {
-private:
-	std::vector<Object*> m_Objects;
-	std::string m_Filepath;
 public:
 	ObjectController(const std::string& filepath);
 	~ObjectController();
 
-	void AddObject();
+	void AddObject(ObjectType obj);
 	void RemoveObject(unsigned int index);
 	void OnImGuiRender() override;
 	void SaveObjects();//to current file
@@ -22,4 +19,7 @@ public:
 	void LoadObjects(const std::string& filepath);//from file
 
 	std::vector<Object*> GetObjects() { return m_Objects; }
+private:
+	std::vector<Object*> m_Objects;
+	std::string m_Filepath;
 };
