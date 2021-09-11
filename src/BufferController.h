@@ -11,6 +11,7 @@ public:
 	void AddObject();
 	void RemoveObject();
 	void UpdateObject(Vertex* vertices, unsigned int vsize, unsigned int* indices, unsigned int isize);
+	//void UpdateObject(std::vector<Vertex> vertices, unsigned int vsize, std::vector<unsigned int> indices, unsigned int isize);
 	void BindBuffers();
 	void UnbindBuffers();
 	void BindTextureSlots(unsigned int start, unsigned int end);//max end is 32

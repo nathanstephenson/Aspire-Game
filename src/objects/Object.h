@@ -47,6 +47,6 @@ public:
 		std::valarray<unsigned int> ind(m_Indices.data(), m_Indices.size());
 		ind += m_VertexPosition;
 		std::vector<unsigned int>indices(std::begin(ind), std::end(ind));
-		return indices;
+		return m_Indices;
 	}
 };

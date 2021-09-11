@@ -55,10 +55,12 @@ void BufferController::Draw(glm::mat4 mvp) {
 
 void BufferController::SetVertices(Vertex* vertices, unsigned int count) {
     memcpy(m_Vertices, vertices, count * sizeof(Vertex));
+    //std::copy(vertices[0], vertices[7], m_Vertices);
     m_VertexBuffer->UpdateData(m_Vertices, count * sizeof(Vertex));
 }
 
 void BufferController::SetIndices(unsigned int* indices, unsigned int count) {
     memcpy(m_Indices, indices, count * sizeof(unsigned int));
+    //std::copy(indices[0], indices[11], m_Indices);
     m_IndexBuffer->UpdateData(m_Indices, count * sizeof(unsigned int));
 }

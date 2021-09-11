@@ -2,7 +2,7 @@
 
 
 Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0.0, 0.0}), m_CharPos({ 0.0, 0.0 }), m_CharVel({ 0.0, 0.0 }), m_lastFrameTime(0.0), m_deltaTime(0.0),
-        m_BufferController(std::make_unique<BufferController>()), m_ObjectContainer(std::make_unique<ObjectController>("filpath")){
+        m_BufferController(std::make_unique<BufferController>()), m_ObjectController(std::make_unique<ObjectController>("filepath")){
     SetWindowSize(windowWidth, windowHeight);
     m_CharPos = {m_WindowSize.x / 2, m_WindowSize.y / 2 };
     
@@ -10,6 +10,8 @@ Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0
 
     m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
     m_Texture1 = std::make_unique<Texture>("res/textures/hands.png");
+
+    //m_ObjectController->AddObject(quad);
 }
 
 Application::~Application() {
@@ -32,9 +34,17 @@ void Application::OnUpdate() {
         4, 5, 6,//up left
         6, 7, 4,//down right
     };
+    //std::vector<Vertex> v;
+    //std::vector<unsigned int> i;
+    //std::copy(vertices[0], vertices[7], v);
+    //std::copy(indices[0], indices[11], i);
+
+    //m_ObjectController->GetObjects()[0]->Transform(m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime), 0, 0);
 
     m_BufferController->BindBuffers();
+
     m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
+    //m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices(), 8*sizeof(Vertex), m_ObjectController->GetObjects()[0]->GetIndices(), 12*sizeof(unsigned int));
 }
 void Application::OnRender() {
 	m_lastFrameTime = glfwGetTime();
