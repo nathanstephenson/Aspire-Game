@@ -11,7 +11,7 @@ Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0
     m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
     m_Texture1 = std::make_unique<Texture>("res/textures/hands.png");
 
-    //m_ObjectController->AddObject(quad);
+    m_ObjectController->AddObject(quad);
 }
 
 Application::~Application() {
@@ -22,29 +22,27 @@ void Application::OnUpdate() {
     frameCount += 1;
 
     m_CharPos = {m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime)};//position changes based on velocity and deltatime
-    auto q0 = CreateQuad(m_CharPos.x, m_CharPos.y, 0.0f);
-    auto q1 = CreateQuad(50.0f, 50.0f, -1.0f);
-    Vertex vertices[8];
-    memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
-    memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
-    unsigned int indices[] = {//each line is a triangle
-        0, 1, 2,//up left
-        2, 3, 0,//down right
+    //auto q0 = CreateQuad(m_CharPos.x, m_CharPos.y, 0.0f);
+    //auto q1 = CreateQuad(50.0f, 50.0f, -1.0f);
+    //Vertex vertices[8];
+    //memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
+    //memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
+    //unsigned int indices[] = {//each line is a triangle
+    //    0, 1, 2,//up left
+    //    2, 3, 0,//down right
 
-        4, 5, 6,//up left
-        6, 7, 4,//down right
-    };
-    //std::vector<Vertex> v;
-    //std::vector<unsigned int> i;
-    //std::copy(vertices[0], vertices[7], v);
-    //std::copy(indices[0], indices[11], i);
+    //    4, 5, 6,//up left
+    //    6, 7, 4,//down right
+    //};
 
+    m_ObjectController->GetObjects()[0]->SetOrigin(m_CharPos.x, m_CharPos.y, 0);
     //m_ObjectController->GetObjects()[0]->Transform(m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime), 0, 0);
 
     m_BufferController->BindBuffers();
 
-    m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
-    //m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices(), 8*sizeof(Vertex), m_ObjectController->GetObjects()[0]->GetIndices(), 12*sizeof(unsigned int));
+    //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
+    //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
+    m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices()->data(), 1000, m_ObjectController->GetObjects()[0]->GetIndices()->data(), 1500  );
 }
 void Application::OnRender() {
 	m_lastFrameTime = glfwGetTime();

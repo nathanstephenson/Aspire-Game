@@ -11,7 +11,6 @@ BufferController::BufferController() : m_Vertices(), m_Indices() {
     layout.Push<float>(2);//repeated to include texture coordinates
     layout.Push<float>(1);//repeated to include texture index
     m_VAO->AddBuffer(*m_VertexBuffer, layout);//needs to come after updateData
-    m_Shader = std::make_unique<Shader>("res/shaders/shader.shader");
 }
 
 BufferController::~BufferController() {
@@ -23,9 +22,9 @@ void BufferController::AddObject() {
 void BufferController::RemoveObject() {
 }
 
-void BufferController::UpdateObject(Vertex* vertices, unsigned int vsize, unsigned int* indices, unsigned int isize) {
-    SetVertices(vertices, vsize/sizeof(Vertex));
-    SetIndices(indices, isize/sizeof(unsigned int));
+void BufferController::UpdateObject(Vertex* vertices, unsigned int vcount, unsigned int* indices, unsigned int icount) {
+    SetVertices(vertices, vcount);
+    SetIndices(indices, icount);
 }
 
 void BufferController::BindBuffers() {
@@ -55,7 +54,7 @@ void BufferController::Draw(glm::mat4 mvp) {
 
 void BufferController::SetVertices(Vertex* vertices, unsigned int count) {
     memcpy(m_Vertices, vertices, count * sizeof(Vertex));
-    //std::copy(vertices[0], vertices[7], m_Vertices);
+    //std::copy(vertices[0], vertices[3], m_Vertices);
     m_VertexBuffer->UpdateData(m_Vertices, count * sizeof(Vertex));
 }
 
