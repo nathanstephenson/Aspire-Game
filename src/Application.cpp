@@ -42,7 +42,7 @@ void Application::OnUpdate() {
 
     //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
     //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
-    m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices()->data(), 1000, m_ObjectController->GetObjects()[0]->GetIndices()->data(), 1500  );
+    m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices(), 1000, m_ObjectController->GetObjects()[0]->GetIndices(), 1500  );
 }
 void Application::OnRender() {
 	m_lastFrameTime = glfwGetTime();

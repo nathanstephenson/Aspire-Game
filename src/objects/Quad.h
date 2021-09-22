@@ -30,10 +30,7 @@ public:
 	Quad() { SetDimensions(20.0, 30.0); SetVertices(CreateQuad(100, 150, 150, 0)); SetIndices({ 0, 1, 2, 2, 3, 0 }); std::cout << "created quad" << std::endl; }
 	~Quad() {}
 
-	void OnUpdate() override {
-		vec2 o = GetOrigin();
-		SetVertices(CreateQuad(100, o.x - 50, o.y - 50, 0));
-	}
+	void OnUpdate() override { SetVertices(CreateQuad(100, GetOrigin().x - 50, GetOrigin().y - 50, 0)); }
 	void OnRender() override {}
 	void OnImGuiRender() override {}
 };
