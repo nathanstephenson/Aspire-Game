@@ -43,7 +43,7 @@ public:
 	}
 	vec2 GetOrigin() { return m_Origin; }
 
-	void SetVertices(std::vector<Vertex> vertices) { m_Vertices = vertices; }
+	void SetVertices(std::vector<Vertex> vertices) { m_Vertices = vertices;/*memcpy(m_Vertices.data(), vertices.data(), m_Vertices.size());*/ }
 	Vertex* GetVertices() { return m_Vertices.data(); }
 
 	void SetIndices(std::vector<unsigned int> indices) { m_Indices = indices; }

@@ -17,7 +17,7 @@ void EventHandler::Wait() {
 }
 
 void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {//doesn't wait for polling
-	std::cout << key << " " << scancode << " " << action << " " << mods << std::endl;
+	//std::cout << key << " " << scancode << " " << action << " " << mods << std::endl;
 	vec2 charVel = m_app->GetCharVel();
 	switch (key) {
 	case (65):
