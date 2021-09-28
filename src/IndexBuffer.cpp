@@ -27,6 +27,5 @@ void IndexBuffer::Unbind() const{
 }
 
 void IndexBuffer::UpdateData(const unsigned int* data, unsigned int size) const {//size needs to be included as data is a pointer
-    Bind();
     GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, data));
 }
