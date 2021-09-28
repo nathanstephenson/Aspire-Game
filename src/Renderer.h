@@ -29,7 +29,7 @@ struct vec4 {
 };
 
 struct Vertex {
-	vec2 Position;
+	vec3 Position;
 	vec4 Color;
 	vec2 TexPos;
 	float TexIndex;

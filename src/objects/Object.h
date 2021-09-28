@@ -6,14 +6,14 @@
 class Object {
 private:
 	unsigned int m_VertexPosition;
-	vec2 m_Size;
-	vec2 m_Origin;
+	vec3 m_Size;
+	vec3 m_Origin;
 	float m_Rotation;
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
 	ObjectType m_Type;
 public:
-	Object() : m_VertexPosition(0), m_Size({ 0.0, 0.0 }), m_Origin({ 0.0, 0.0 }), m_Rotation(0), m_Vertices({}), m_Indices({}), m_Type(blank) {}
+	Object() : m_VertexPosition(0), m_Size({ 0.0, 0.0, 0.0 }), m_Origin({ 0.0, 0.0, 0.0 }), m_Rotation(0), m_Vertices({}), m_Indices({}), m_Type(blank) {}
 	virtual ~Object() {}
 
 	virtual void OnUpdate() {}
@@ -35,13 +35,13 @@ public:
 	unsigned int GetVertexPosition() { return m_VertexPosition; }
 
 	void SetDimensions(float width, float height) { m_Size = {width, height}; }
-	vec2 GetDimensions() { return m_Size; }
+	vec3 GetDimensions() { return m_Size; }
 
 	void SetOrigin(float x, float y, float z) { 
 		m_Origin = {x, y};
 		OnUpdate();
 	}
-	vec2 GetOrigin() { return m_Origin; }
+	vec3 GetOrigin() { return m_Origin; }
 
 	void SetVertices(std::vector<Vertex> vertices) { m_Vertices = vertices;/*memcpy(m_Vertices.data(), vertices.data(), m_Vertices.size());*/ }
 	Vertex* GetVertices() { return m_Vertices.data(); }
