@@ -19,6 +19,7 @@ public:
 	void LoadObjects(const std::string& filepath);//from file
 
 	std::vector<Object*> GetObjects() { return m_Objects; }
+	Object* GetObject(unsigned int index);
 private:
 	std::vector<Object*> m_Objects;
 	std::string m_Filepath;

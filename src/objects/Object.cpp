@@ -3,6 +3,7 @@
 Object::Object() : m_VertexPosition(0), m_Size({ 0.0, 0.0, 0.0 }), m_Origin({ 0.0, 0.0, 0.0 }), m_Rotation(0), m_Vertices({}), m_Indices({}), m_Type(blank) {
 
 }
+Object::~Object() {}
 
 void Object::OnUpdate() {}
 void Object::OnRender() {}

@@ -42,3 +42,7 @@ void ObjectController::SaveObjectsAs(const std::string& filepath) {
 void ObjectController::LoadObjects(const std::string& filepath) {
 	m_Filepath = filepath;
 }
+
+Object* ObjectController::GetObject(unsigned int index) { 
+	return m_Objects[index]; 
+}
