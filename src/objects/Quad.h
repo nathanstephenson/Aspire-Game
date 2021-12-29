@@ -27,7 +27,7 @@ static std::vector<Vertex>CreateQuad(float size, float x, float y, float z, floa
 class Quad : public Object {
 private:
 public:
-	Quad() { SetDimensions(20.0, 30.0); SetVertices(CreateQuad(250, 150, 150, 0, 1)); SetIndices({ 0, 1, 2, 2, 3, 0 }); std::cout << "created quad" << std::endl; }
+	Quad() { SetDimensions(20.0, 30.0); SetVertices(CreateQuad(250, GetOrigin().x - 50, GetOrigin().y - 50, 0, 1)); SetIndices({ 0, 1, 2, 2, 3, 0 }); std::cout << "created quad" << std::endl; }
 	~Quad() {}
 
 	void OnUpdate() override { SetVertices(CreateQuad(100, GetOrigin().x - 50, GetOrigin().y - 50, 0, 0)); }
