@@ -11,14 +11,22 @@ Application::Application(float windowWidth, float windowHeight) : m_CursorPos({0
     m_Texture0 = std::make_unique<Texture>("res/textures/weirdKEKW.png");
     m_Texture1 = std::make_unique<Texture>("res/textures/hands.png");
 
-    m_ObjectController->AddObject(quad);
+    m_BufferController->BindTextureSlots(0, 1);
+    m_Texture0->Bind(0);//each texture must be bound to its slot for rendering
+    m_Texture1->Bind(1);
 }
 
 Application::~Application() {
+    m_Texture0->Unbind();
+    m_Texture1->Unbind();
 }
 
 void Application::OnUpdate() {
 	m_deltaTime = glfwGetTime() - m_lastFrameTime;
+    if (frameCount < 1) {
+
+        m_ObjectController->AddObject(quad);
+    }
     frameCount += 1;
 
     m_CharPos = {m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime)};//position changes based on velocity and deltatime
@@ -27,46 +35,40 @@ void Application::OnUpdate() {
     //Vertex vertices[8];
     //memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
     //memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
-    //unsigned int indices[] = {//each line is a triangle
-    //    0, 1, 2,//up left
-    //    2, 3, 0,//down right
+    unsigned int indices[] = {//each line is a triangle
+        0, 1, 2,//up left
+        2, 3, 0,//down right
 
-    //    4, 5, 6,//up left
-    //    6, 7, 4,//down right
-    //};
+        //4, 5, 6,//up left
+        //6, 7, 4,//down right
+    };
 
-    m_ObjectController->GetObjects()[0]->SetOrigin(m_CharPos.x, m_CharPos.y, 0);
+    m_ObjectController->GetObject(0)->SetOrigin(m_CharPos.x, m_CharPos.y, 0);
     //m_ObjectController->GetObjects()[0]->Transform(m_CharPos.x + (m_CharVel.x * m_deltaTime), m_CharPos.y + (m_CharVel.y * m_deltaTime), 0, 0);
 
-    m_BufferController->BindBuffers();
 
     //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
     //m_BufferController->UpdateObject(vertices, 8*sizeof(Vertex), indices, 12*sizeof(unsigned int));
+    //m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices(), 1000, indices, 6);
     m_BufferController->UpdateObject(m_ObjectController->GetObjects()[0]->GetVertices(), 1000, m_ObjectController->GetObjects()[0]->GetIndices(), 1500);
+    //looks like display error may be a problem with indices
 }
 void Application::OnRender() {
 	m_lastFrameTime = glfwGetTime();
 
-    m_BufferController->BindTextureSlots(0, 1);
-    m_Texture0->Bind(0);//each texture must be bound to its slot for rendering
-    m_Texture1->Bind(1);
-
     {
-        float cursorMovementMultiplier = 0.05;
+        float cursorMovementMultiplier = 0.415;
 
         glm::mat4 m_Proj = glm::ortho(0.0f, m_WindowSize.x, 0.0f, m_WindowSize.y, -1.0f, 1.0f);//projection matrix
         glm::vec3 mouseTranslation = glm::vec3({ -m_CursorPos.x * cursorMovementMultiplier, -m_CursorPos.y * cursorMovementMultiplier, 0.0f });
         glm::vec3 moveTranslation = glm::vec3({ m_WindowSize.x/2-m_CharPos.x, m_WindowSize.y/2-m_CharPos.y, 0.0f });
         glm::mat4 viewMove = glm::translate(glm::mat4(1.0f), moveTranslation);//view matrix
         glm::mat4 viewMouse = glm::translate(glm::mat4(1.0f), mouseTranslation);//view matrix
-        glm::mat4 view = viewMouse*viewMove;//view matrix
+        glm::mat4 view = viewMouse * viewMove;//view matrix
         glm::mat4 mvp = m_Proj * view;//ignoring model matrix in mvp as it is never changed from its origin. 
 
         m_BufferController->Draw(mvp);
     }
-    m_Texture0->Unbind();
-    m_Texture1->Unbind();
-    m_BufferController->UnbindBuffers();
 }
 void Application::OnImGuiRender() {
 
