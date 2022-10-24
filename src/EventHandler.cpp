@@ -20,7 +20,7 @@ void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	std::cout << key << " " << scancode << " " << action << " " << mods << std::endl;
 	vec2 charVel = m_app->GetCharVel();
 	switch (key) {
-	case (65):
+	case (65)://A
 		if (action == 1) {
 			m_app->SetCharVel(-100.0, charVel.y);
 		}
@@ -28,7 +28,7 @@ void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 			m_app->SetCharVel(0, charVel.y);
 		}
 		break;
-	case (68):
+	case (68)://D
 		if (action == 1) {
 			m_app->SetCharVel(100.0, charVel.y);
 		}
@@ -36,7 +36,7 @@ void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 			m_app->SetCharVel(0, charVel.y);
 		}
 		break;
-	case (83):
+	case (83)://S
 		if (action == 1) {
 			m_app->SetCharVel(charVel.x, -25.0);
 		}
@@ -44,7 +44,7 @@ void EventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 			m_app->SetCharVel(charVel.x, 0);
 		}
 		break;
-	case (87):
+	case (87)://W
 		if (action == 1) {
 			m_app->SetCharVel(charVel.x, 25.0);
 		}
